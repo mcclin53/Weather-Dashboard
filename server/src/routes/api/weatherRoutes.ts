@@ -9,45 +9,36 @@ import WeatherService from '../../service/weatherService.js';
 
 // these routes are ALL PREFIXED with '/api/weather'
 router.post('/', async (req: Request, res: Response) => {
-try {
-  console.log("Incoming Data: ", req.body)  // { cityName: '' }
-  const cityName = req.body.cityName;
-  const weatherData = await WeatherService.getWeatherForCity(cityName);
-  await HistoryService.addCity(cityName);
-  res.status(200).json(weatherData);
-  catch (err) {
-    res.status(500).json({ message:err });
-  }
-});
-  // TODO: GET weather data from city name
 
-  router.get('/', (req: Request, res: Response) => {
-//  const weatherData = 
-//  router.get('/', (req: Request, res: Response) => req.JSON(weatherData))
+  // TODO: GET weather data from city name
+  try {
+    const cityName = req.body.cityName;
+    const weatherData = await WeatherService.getWeatherForCity(cityName);
+    await HistoryService.addCity(cityName);
+
   // TODO: save city to search history --> use the HistoryService
-  const result = HistoryService.addCity(cityName);
-  // RESPONSE BACK TO THE CLIENT FETCH REQUEST
-  res.json(result);
-//  router.put('/history',(req: Request, res: Response))
+  return res.status(200).json(weatherData);
+} catch (error: any) {
+  return res.status(500).json({ error: 'Failed to retrieve weather data' });
+}
 });
 
 // TODO: GET search history
 router.get('/history', async (req: Request, res: Response) => {
   try {
-    const id = req.params.id;
-    await HistoryService.removeCity(id);
+    const history = await HistoryService.getCities(); 
+    return res.status(200).json(history); 
+  } catch (error) {
+    return res.status(500).json({ error: 'Failed to retrieve history' });
   }
 });
 
 // * BONUS TODO: DELETE city from search history
 router.delete('/history/:id', async (req: Request, res: Response) => {
-  try {
+
     const id = req.params.id;
     await HistoryService.removeCity(id);
-    res.status(204).send()
-  } catch (err)
-  res.status(500).json({ message:err });
-  
-});
+    res.status(204).send();
+  });
 
 export default router;
