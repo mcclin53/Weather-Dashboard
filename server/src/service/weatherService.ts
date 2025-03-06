@@ -21,6 +21,12 @@ class WeatherService {
   APIkey: string;
   cityName: string;
 
+  constructor() {
+    this.baseURL = process.env.API_BASE_URL;
+    this.APIkey = process.env.API_KEY;
+    this.cityName = '';  
+  }
+
   // TODO: Create fetchLocationData method
   private async fetchLocationData(query: string) {
  fetch(api.openweathermap.org/data/2.5/forecast?lat={lat}&lon={lon}&appid={this.APIkey})
@@ -34,9 +40,10 @@ class WeatherService {
 
   // TODO: Create destructureLocationData method
   private destructureLocationData(locationData: Coordinates): Coordinates {
-    const { latitude, longitude } = locationData;
-    console.log (locationData.latitude);
-    console.log (locationData.longitude);
+    const { lat, lon } = locationData;
+    console.log (locationData.lat);
+    console.log (locationData.lon);
+    return {lat, lon };
   }
 
   // TODO: Create buildGeocodeQuery method
