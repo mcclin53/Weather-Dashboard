@@ -1,4 +1,5 @@
 import dotenv from 'dotenv';
+
 dotenv.config();
 
 // TODO: Define an interface for the Coordinates object
@@ -33,6 +34,7 @@ class Weather {
       this.icon = icon;
       this.iconDescription = iconDescription;
 }
+}
 // TODO: Complete the WeatherService class
 class WeatherService {
   // TODO: Define the baseURL, API key, and city name properties
@@ -41,8 +43,8 @@ class WeatherService {
   cityName: string;
 
   constructor() {
-    this.baseURL = process.env.API_BASE_URL;
-    this.apiKey = process.env.API_KEY;
+    this.baseURL = process.env.API_BASE_URL || '';
+    this.apiKey = process.env.API_KEY || '';
     this.cityName = '';  
   }
 
@@ -71,12 +73,12 @@ class WeatherService {
 
   // TODO: Create buildGeocodeQuery method
   private buildGeocodeQuery(): string {
-    return `${this.baseURL}geo/1.0/direct?q=${this.cityName}&limit=1&appid=${this.apiKey}`;
+    return `${this.baseURL}/geo/1.0/direct?q=${this.cityName}&limit=1&appid=${this.apiKey}`;
   }
 
   // TODO: Create buildWeatherQuery method
   private buildWeatherQuery(coordinates: Coordinates): string {
-    return `${this.baseURL}data/2.5/forecast?lat=${coordinates.latitude}&lon=${coordinates.longitude}&appid=${this.apiKey}`;
+    return `${this.baseURL}/data/2.5/forecast?lat=${coordinates.latitude}&lon=${coordinates.longitude}&appid=${this.apiKey}`;
   }
 
   // TODO: Create fetchAndDestructureLocationData method
@@ -104,9 +106,9 @@ class WeatherService {
   // TODO: Build parseCurrentWeather method
   private parseCurrentWeather(response: any): Weather[] {
     const data = response.list[0];
-        const weather = new Weather(
+    const date = new Date(data.dt * 1000).toLocaleDateString();      const weather = new Weather(
       this.cityName,
-      data.date,
+      date,
       data.main.temp,
       data.wind.speed,
       data.main.humidity,
@@ -118,16 +120,17 @@ class WeatherService {
   }
 
   // TODO: Complete buildForecastArray method
-  private buildForecastArray(currentWeather: Weather, weatherData: any[]) {
+  private buildForecastArray(currentWeather: Weather, weatherData: any[]): Weather[] {
     const weatherForecast: Weather[] = [currentWeather];
     const filteredWeatherData = weatherData.filter((data: any) => {
       return data;
     });
     for (const day of filteredWeatherData) {
+    const date = new Date(day.dt * 1000).toLocaleDateString();
       weatherForecast.push(
         new Weather(
           this.cityName,
-          day.date,
+          date,
           day.main.temp,
           day.wind.speed,
           day.main.humidity,

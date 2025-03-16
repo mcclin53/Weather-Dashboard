@@ -2,7 +2,13 @@ import fs from 'node:fs/promises';
 
 // TODO: Define a City class with name and id properties
 class City {
-  constructor( id:string, name: string) {}
+  id: string;
+  name: string;
+
+  constructor( id:string, name: string) {
+    this.id = id;
+    this.name = name;
+  }
 }
 // TODO: Complete the HistoryService class
 class HistoryService {
@@ -66,7 +72,7 @@ class HistoryService {
     try {
       const citiesArray = await this.read();
       const jsData = Array.isArray(citiesArray) ? citiesArray : JSON.parse(citiesArray);
-      const updatedCities = jsData.filter(existingCity => existingCity !== City);
+      const updatedCities = jsData.filter((existingCity: City) => existingCity.id !== id);
       await this.write(updatedCities);
     } catch (error) {
       console.log("Err ", error);
