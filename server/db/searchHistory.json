@@ -1,1 +1,14 @@
-[]
+[
+  {
+    "id": "20da57da-8b2b-4ada-bb79-f1fa671f0eb6",
+    "name": "Detroit"
+  },
+  {
+    "id": "23faeb63-1f93-4749-9956-e2007d674592",
+    "name": "traverse city"
+  },
+  {
+    "id": "c5839d7f-1951-4574-8b18-4b68fe9991dd",
+    "name": "Grand Rapids"
+  }
+]
