@@ -12,7 +12,9 @@
   - [Questions](#questions)
   ## Description
 A dashboard that allows the user to view up to date weather forecasts in different cities.
-![Screenshot](https://github.com/mcclin53/)
+![Screenshot](https://github.com/mcclin53/Weather-Dashboard/blob/main/Assets/Screenshot%202025-04-09%20233332.jpg?raw=true)
+
+(https://weather-dashboard-892o.onrender.com)
 
   ## Installation
 This app is deployed to render so the user can easily view the application.
