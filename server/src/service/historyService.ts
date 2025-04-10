@@ -1,12 +1,14 @@
 import fs from 'node:fs/promises';
+import { randomUUID } from 'crypto';
+
 
 // TODO: Define a City class with name and id properties
 class City {
   id: string;
   name: string;
 
-  constructor( id:string, name: string) {
-    this.id = id;
+  constructor( name: string) {
+    this.id = randomUUID();
     this.name = name;
   }
 }
@@ -40,31 +42,20 @@ class HistoryService {
 
   // TODO: Define a getCities method that reads the cities from the searchHistory.json file and returns them as an array of City objects
   async getCities() {
-    try {
-    const citiesData = await this.read();
-    console.log("Cities: ", citiesData);
-    const jsData = typeof citiesData === 'string' ? JSON.parse(citiesData) : citiesData;
-    console.log("JS Data: ", jsData);
-    return jsData as City[];
-    } catch (error) {
-      console.log("Err: ", error);
-      return [];
+    const cities = await this.read();
+    return cities;
     }
-  }
 
   // TODO Define an addCity method that adds a city to the searchHistory.json file
   async addCity(city: string) {
     try {
-      const citiesArray = await this.read();
-      const jsData = Array.isArray(citiesArray) ? citiesArray : JSON.parse(citiesArray);
-      jsData.push(city);
-      await this.write(jsData);
+      const cities = await this.getCities();
+      const newCity = new City(city);
+      cities.push(newCity);
+      await this.write(cities);
     } catch (error) {
-      console.log("Err: ", error);
+      console.log("Add error:", error);
     }
-
-    // SAVE the NEW INSTANCE of our dataset (OVERWRITTING THE DATA)
-
   }
 
   // * BONUS TODO: Define a removeCity method that removes a city from the searchHistory.json file

@@ -11,7 +11,7 @@ interface Coordinates {
 class Weather {
   city: string;
   date: string;
-  temp: number;
+  tempF: number;
   windSpeed: number;
   humidity: number;
   icon: string;
@@ -20,7 +20,7 @@ class Weather {
   constructor(
     city: string,
     date: string,
-    temp: number,
+    tempF: number,
     windSpeed: number,
     humidity: number,
     icon: string,
@@ -28,7 +28,7 @@ class Weather {
   ) {
       this.city = city;
       this.date = date;
-      this.temp = temp;
+      this.tempF = tempF;
       this.windSpeed = windSpeed;
       this.humidity = humidity;
       this.icon = icon;
@@ -49,7 +49,7 @@ class WeatherService {
   }
 
   // TODO: Create fetchLocationData method
-  private async fetchLocationData(query: string): Promise<any> {
+  private async fetchLocationData(query: string) {
     try {
     const response = await fetch(query);
     if (!response.ok) {
@@ -90,7 +90,7 @@ class WeatherService {
   }
 
   // TODO: Create fetchWeatherData method
-  private async fetchWeatherData(coordinates: Coordinates): Promise<any> {
+  private async fetchWeatherData(coordinates: Coordinates) {
     try {
 
       const response = await fetch(this.buildWeatherQuery(coordinates));
@@ -103,13 +103,18 @@ class WeatherService {
       console.log(error);
     }
   }
+  private kelvinToFahrenheit(kelvin: number): number {
+    return Math.round((kelvin - 273.15) * 9) / 5 + 32;
+  }
   // TODO: Build parseCurrentWeather method
   private parseCurrentWeather(response: any): Weather[] {
     const data = response.list[0];
-    const date = new Date(data.dt * 1000).toLocaleDateString();      const weather = new Weather(
+    const date = new Date(data.dt * 1000).toLocaleDateString();      
+    const tempF = this.kelvinToFahrenheit(data.main.temp);
+    const weather = new Weather(
       this.cityName,
       date,
-      data.main.temp,
+      tempF,
       data.wind.speed,
       data.main.humidity,
       data.weather[0].icon,
@@ -131,7 +136,7 @@ class WeatherService {
         new Weather(
           this.cityName,
           date,
-          day.main.temp,
+          this.kelvinToFahrenheit(day.main.temp),
           day.wind.speed,
           day.main.humidity,
           day.weather[0].icon,
