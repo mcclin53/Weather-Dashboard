@@ -17,11 +17,6 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 // TODO: Implement middleware to connect the routes
-/*
-app.post('/api/weather', (req: Request, res: Response) => {
-
-})
-*/
 
 app.use(routes);
 
